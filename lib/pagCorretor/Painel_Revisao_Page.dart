@@ -131,7 +131,7 @@ void _marcarEmRevisao() {
             if (emRevisao) ...[
               const Text(
                 'Status: Em Revisão',
-                style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ],
           ],

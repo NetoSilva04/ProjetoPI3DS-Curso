@@ -27,18 +27,10 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
   bool _showNotificationPanel = false;
 
   final List<String> _avatarList = [
-    'https://i.postimg.cc/yN0wLz5K/avatar-1.png',
+    'https://img.icons8.com/?size=96&id=13527&format=png',
     'https://i.postimg.cc/NMyM4nS2/avatar-2.png',
     'https://i.postimg.cc/L85XQWk6/avatar-3.png',
     'https://i.postimg.cc/W12vM6VT/avatar-4.png',
-    'https://i.postimg.cc/Bv2B5C8f/avatar-5.png',
-    'https://i.postimg.cc/TPgP8v6K/avatar-6.png',
-    'https://i.postimg.cc/J0k7pW02/avatar-7.png',
-    'https://i.postimg.cc/Pry241tS/avatar-8.png',
-    'https://i.postimg.cc/W4N6n5p5/avatar-9.png',
-    'https://i.postimg.cc/Kz4jgy7M/avatar-10.png',
-    'https://i.postimg.cc/x8PjDSHx/avatar-11.png',
-    'https://i.postimg.cc/50pC5YVw/avatar-12.png',
   ];
 
   @override
