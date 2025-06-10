@@ -9,7 +9,6 @@ class CadastroPage extends StatefulWidget {
 }
 
 class CadastroPageState extends State<CadastroPage> {
-  // Controladores gerais
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -20,6 +19,20 @@ class CadastroPageState extends State<CadastroPage> {
 
   final TextEditingController _formacaoController = TextEditingController();
   final TextEditingController _experienciaController = TextEditingController();
+  final TextEditingController _outraEspecialidadeController =
+      TextEditingController();
+
+  final List<String> _especialidades = [
+    'Língua Portuguesa',
+    'Redação',
+    'Literatura',
+    'História',
+    'Geografia',
+    'Sociologia',
+    'Filosofia',
+    'Outra'
+  ];
+  String _especialidadeSelecionada = 'Língua Portuguesa';
 
   @override
   void dispose() {
@@ -30,6 +43,7 @@ class CadastroPageState extends State<CadastroPage> {
     _serieController.dispose();
     _formacaoController.dispose();
     _experienciaController.dispose();
+    _outraEspecialidadeController.dispose();
     super.dispose();
   }
 
@@ -40,18 +54,35 @@ class CadastroPageState extends State<CadastroPage> {
 
     bool camposEstudanteValidos = false;
     if (_userType == 'Estudante') {
-      camposEstudanteValidos = _escolaController.text.isNotEmpty && _serieController.text.isNotEmpty;
+      camposEstudanteValidos =
+          _escolaController.text.isNotEmpty && _serieController.text.isNotEmpty;
     }
 
     bool camposCorretorValidos = false;
     if (_userType == 'Corretor') {
-      camposCorretorValidos = _formacaoController.text.isNotEmpty && _experienciaController.text.isNotEmpty;
+      camposCorretorValidos = _formacaoController.text.isNotEmpty &&
+          _experienciaController.text.isNotEmpty;
+      if (_especialidadeSelecionada == 'Outra') {
+        camposCorretorValidos = camposCorretorValidos &&
+            _outraEspecialidadeController.text.isNotEmpty;
+      }
     }
 
-    if (nome.isNotEmpty && email.isNotEmpty && password.isNotEmpty && (camposEstudanteValidos || camposCorretorValidos)) {
+    if (nome.isNotEmpty &&
+        email.isNotEmpty &&
+        password.isNotEmpty &&
+        (camposEstudanteValidos || camposCorretorValidos)) {
+      String especialidadeFinal = _especialidadeSelecionada;
+      if (_especialidadeSelecionada == 'Outra') {
+        especialidadeFinal = _outraEspecialidadeController.text;
+      }
+
       print('Cadastro realizado com sucesso!');
       print('Nome: $nome, Email: $email, Tipo: $_userType');
-      
+      if (_userType == 'Corretor') {
+        print('Especialidade: $especialidadeFinal');
+      }
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -76,26 +107,28 @@ class CadastroPageState extends State<CadastroPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // --- Campos Comuns ---
               TextField(
                 controller: _nomeController,
-                decoration: const InputDecoration(labelText: 'Nome Completo', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'Nome Completo', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(labelText: 'E-mail', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'E-mail', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Senha', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'Senha', border: OutlineInputBorder()),
                 obscureText: true,
               ),
               const SizedBox(height: 20),
-
-              const Text('Eu sou:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text('Eu sou:',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               DropdownButtonFormField<String>(
                 value: _userType,
                 decoration: const InputDecoration(border: OutlineInputBorder()),
@@ -112,21 +145,18 @@ class CadastroPageState extends State<CadastroPage> {
                 }).toList(),
               ),
               const SizedBox(height: 20),
-              
               if (_userType == 'Estudante')
                 ..._buildEstudanteFields()
               else
                 ..._buildCorretorFields(),
-
               const SizedBox(height: 24),
-
-              // --- Botões ---
               ElevatedButton(
                 onPressed: _cadastro,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Criar Conta', style: TextStyle(fontSize: 16)),
+                child:
+                    const Text('Criar Conta', style: TextStyle(fontSize: 16)),
               ),
               const SizedBox(height: 8),
               TextButton(
@@ -145,33 +175,63 @@ class CadastroPageState extends State<CadastroPage> {
     );
   }
 
-  // Constrói os campos para o perfil de Estudante
   List<Widget> _buildEstudanteFields() {
     return [
       TextField(
         controller: _escolaController,
-        decoration: const InputDecoration(labelText: 'Escola', border: OutlineInputBorder()),
+        decoration: const InputDecoration(
+            labelText: 'Escola', border: OutlineInputBorder()),
       ),
       const SizedBox(height: 16),
       TextField(
         controller: _serieController,
-        decoration: const InputDecoration(labelText: 'Série/Ano', border: OutlineInputBorder()),
+        decoration: const InputDecoration(
+            labelText: 'Série/Ano', border: OutlineInputBorder()),
       ),
     ];
   }
 
-  // Constrói os campos para o perfil de Corretor
   List<Widget> _buildCorretorFields() {
     return [
       TextField(
         controller: _formacaoController,
-        decoration: const InputDecoration(labelText: 'Formação Acadêmica', border: OutlineInputBorder()),
+        decoration: const InputDecoration(
+            labelText: 'Formação Acadêmica', border: OutlineInputBorder()),
       ),
+      const SizedBox(height: 16),
+      DropdownButtonFormField<String>(
+        value: _especialidadeSelecionada,
+        decoration: const InputDecoration(
+            labelText: 'Especialidade Principal',
+            border: OutlineInputBorder()),
+        onChanged: (String? newValue) {
+          setState(() {
+            _especialidadeSelecionada = newValue!;
+          });
+        },
+        items: _especialidades.map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+      if (_especialidadeSelecionada == 'Outra')
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: TextField(
+            controller: _outraEspecialidadeController,
+            decoration: const InputDecoration(
+                labelText: 'Qual a sua especialidade?',
+                border: OutlineInputBorder()),
+          ),
+        ),
       const SizedBox(height: 16),
       TextField(
         controller: _experienciaController,
         keyboardType: TextInputType.number,
-        decoration: const InputDecoration(labelText: 'Anos de Experiência', border: OutlineInputBorder()),
+        decoration: const InputDecoration(
+            labelText: 'Anos de Experiência', border: OutlineInputBorder()),
       ),
     ];
   }
