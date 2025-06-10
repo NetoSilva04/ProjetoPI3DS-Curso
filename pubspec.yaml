@@ -1,0 +1,34 @@
+name: projetopi
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  youtube_player_iframe: ^5.2.1
+  cupertino_icons: ^1.0.8
+  image_picker: ^1.1.2
+  cached_network_image: ^3.2.0
+  intl: ^0.20.2
+<<<<<<< HEAD
+  fl_chart: ^1.0.0
+=======
+  fl_chart: ^0.68.0
+>>>>>>> 04d4ebfeee8e01c107caf058119c17ceb87b9f7f
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+<<<<<<< HEAD
+  flutter_lints: ^5.0.0
+=======
+  flutter_lints: ^6.0.0
+>>>>>>> 04d4ebfeee8e01c107caf058119c17ceb87b9f7f
+
+flutter:
+  uses-material-design: true
