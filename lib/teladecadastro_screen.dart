@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:projetopi/teladelogin_screen.dart';
 
 class CadastroPage extends StatefulWidget {
@@ -18,14 +16,24 @@ class CadastroPageState extends State<CadastroPage> {
   final TextEditingController _serieController = TextEditingController();
   final TextEditingController _formacaoController = TextEditingController();
   final TextEditingController _experienciaController = TextEditingController();
-  final TextEditingController _outraEspecialidadeController = TextEditingController();
+  final TextEditingController _outraEspecialidadeController =
+      TextEditingController();
 
   String _userType = 'Estudante';
   String _especialidadeSelecionada = 'Língua Portuguesa';
   String? _sexoSelecionado;
   bool _isLoading = false;
 
-  final List<String> _especialidades = ['Língua Portuguesa', 'Redação', 'Literatura', 'História', 'Geografia', 'Sociologia', 'Filosofia', 'Outra'];
+  final List<String> _especialidades = [
+    'Língua Portuguesa',
+    'Redação',
+    'Literatura',
+    'História',
+    'Geografia',
+    'Sociologia',
+    'Filosofia',
+    'Outra'
+  ];
   final List<String> _sexos = ['Masculino', 'Feminino'];
 
   @override
@@ -55,17 +63,24 @@ class CadastroPageState extends State<CadastroPage> {
 
     bool camposEspecificosValidos = false;
     if (_userType == 'Estudante') {
-      camposEspecificosValidos = _escolaController.text.isNotEmpty && _serieController.text.isNotEmpty;
+      camposEspecificosValidos = _escolaController.text.isNotEmpty &&
+          _serieController.text.isNotEmpty;
     } else {
-      camposEspecificosValidos = _formacaoController.text.isNotEmpty && _experienciaController.text.isNotEmpty;
+      camposEspecificosValidos = _formacaoController.text.isNotEmpty &&
+          _experienciaController.text.isNotEmpty;
       if (_especialidadeSelecionada == 'Outra') {
-        camposEspecificosValidos = camposEspecificosValidos && _outraEspecialidadeController.text.isNotEmpty;
+        camposEspecificosValidos = camposEspecificosValidos &&
+            _outraEspecialidadeController.text.isNotEmpty;
       }
     }
 
-    if (nome.isEmpty || email.isEmpty || password.isEmpty || !camposEspecificosValidos) {
+    if (nome.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        !camposEspecificosValidos) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, preencha todos os campos obrigatórios.')),
+        const SnackBar(
+            content: Text('Por favor, preencha todos os campos obrigatórios.')),
       );
       return;
     }
@@ -74,58 +89,21 @@ class CadastroPageState extends State<CadastroPage> {
       _isLoading = true;
     });
 
-    final url = Uri.parse('http://10.0.2.2:8000/api/register');
+    await Future.delayed(const Duration(seconds: 2));
 
-    final Map<String, String> body = {
-      'name': nome,
-      'email': email,
-      'password': password,
-      'user_type': _userType,
-      'sexo': _sexoSelecionado!,
-    };
+    if (!mounted) return;
 
-    if (_userType == 'Estudante') {
-      body['escola'] = _escolaController.text;
-      body['serie'] = _serieController.text;
-    } else {
-      body['formacao'] = _formacaoController.text;
-      body['experiencia_anos'] = _experienciaController.text;
-      body['especialidade'] = _especialidadeSelecionada == 'Outra'
-          ? _outraEspecialidadeController.text
-          : _especialidadeSelecionada;
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Cadastro realizado com sucesso!')),
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
 
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-        body: json.encode(body),
-      );
-
-      if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Cadastro realizado com sucesso!')),
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      } else {
-        final responseBody = json.decode(response.body);
-        final errorMessage = responseBody['message'] ?? 'Ocorreu um erro desconhecido.';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro: $errorMessage')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Não foi possível se conectar ao servidor. Verifique sua internet.')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -143,18 +121,21 @@ class CadastroPageState extends State<CadastroPage> {
             children: [
               TextField(
                 controller: _nomeController,
-                decoration: const InputDecoration(labelText: 'Nome Completo', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'Nome Completo', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(labelText: 'E-mail', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'E-mail', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Senha', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'Senha', border: OutlineInputBorder()),
                 obscureText: true,
               ),
               const SizedBox(height: 16),
@@ -175,7 +156,8 @@ class CadastroPageState extends State<CadastroPage> {
                 }).toList(),
               ),
               const SizedBox(height: 20),
-              const Text('Eu sou:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text('Eu sou:',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               DropdownButtonFormField<String>(
                 value: _userType,
                 decoration: const InputDecoration(border: OutlineInputBorder()),
@@ -206,16 +188,19 @@ class CadastroPageState extends State<CadastroPage> {
                     ? const SizedBox(
                         height: 20,
                         width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 3, color: Colors.white),
+                        child: CircularProgressIndicator(
+                            strokeWidth: 3, color: Colors.white),
                       )
-                    : const Text('Criar Conta', style: TextStyle(fontSize: 16)),
+                    : const Text('Criar Conta',
+                        style: TextStyle(fontSize: 16)),
               ),
               const SizedBox(height: 8),
               TextButton(
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const LoginPage()),
                   );
                 },
                 child: const Text('Já tenho uma conta'),

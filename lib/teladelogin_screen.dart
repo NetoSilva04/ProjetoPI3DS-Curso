@@ -63,7 +63,7 @@ class LoginPageState extends State<LoginPage> {
       );
     }
 
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _isLoading = false;
       });
@@ -101,7 +101,9 @@ class LoginPageState extends State<LoginPage> {
                   prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                      _isPasswordVisible
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
                     onPressed: () {
                       setState(() {
@@ -131,22 +133,28 @@ class LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 8),
               TextButton(
-                onPressed: _isLoading ? null : () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CadastroPage()),
-                  );
-                },
+                onPressed: _isLoading
+                    ? null
+                    : () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CadastroPage()),
+                        );
+                      },
                 child: const Text('Criar uma conta'),
               ),
               TextButton(
-                onPressed: _isLoading ? null : () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PaginaPrincipal()),
-                    (route) => false,
-                  );
-                },
+                onPressed: _isLoading
+                    ? null
+                    : () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const PaginaPrincipal()),
+                          (route) => false,
+                        );
+                      },
                 child: const Text('Voltar à tela inicial'),
               ),
             ],
